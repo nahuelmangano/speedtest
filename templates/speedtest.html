@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Test de Velocidad{% endblock %}
+{% block content %}
+<h1 style="text-align:center; margin-top: 40px;">Test de Velocidad</h1>
+<div class="card">
+    <p id="status"></p>
+    <div class="loader" id="loader"></div>
+    <button onclick="runTest()">Iniciar Test</button>
+    <div id="results" style="display:none;">
+        <div class="result">Descarga: <strong id="download"></strong> Mbps</div>
+        <div class="result">Subida: <strong id="upload"></strong> Mbps</div>
+        <div class="result">Ping: <strong id="ping"></strong> ms</div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+{% endblock %}

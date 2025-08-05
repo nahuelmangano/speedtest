@@ -1,55 +1,142 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
 body {
-    font-family: 'Segoe UI', Arial, sans-serif;
-    background: linear-gradient(135deg, #ece9e6, #ffffff);
+    font-family: 'Inter', sans-serif;
+    background: #f9fafb;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    background-color: #0d47a1;
+    color: white;
+    padding: 15px 30px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 4px rgb(0 0 0 / 0.1);
+}
+
+.nav-menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 20px;
+}
+
+.nav-menu li a {
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: color 0.3s ease;
+}
+
+.nav-menu li a:hover {
+    color: #ffca28;
+}
+
+.container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+h1, h2 {
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+p {
+    line-height: 1.6;
+    font-size: 1.1rem;
+}
+
+ul.projects-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-left: 0;
+    list-style: none;
+}
+
+.projects-list li {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgb(0 0 0 / 0.1);
+    flex: 1 1 calc(50% - 20px);
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    padding: 20px;
-    color: #333;
+    justify-content: space-between;
+    transition: transform 0.2s ease;
 }
 
-h1 {
-    font-weight: 500;
-    margin-bottom: 20px;
-    font-size: clamp(1.5rem, 5vw, 2rem);
+.projects-list li:hover {
+    transform: translateY(-5px);
+}
+
+.projects-list li a {
+    font-weight: 600;
+    font-size: 1.2rem;
+    color: #0d47a1;
+    text-decoration: none;
+    margin-bottom: 10px;
+}
+
+.projects-list li a:hover {
+    color: #ffca28;
+}
+
+footer {
     text-align: center;
+    padding: 20px;
+    font-size: 0.9rem;
+    color: #666;
+    border-top: 1px solid #ddd;
+    margin-top: 60px;
 }
 
+/* Speedtest card style override */
 .card {
     background: white;
     border-radius: 15px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    padding: 20px;
-    width: 100%;
-    max-width: 350px;
+    padding: 30px;
+    max-width: 400px;
+    margin: 0 auto 40px auto;
     text-align: center;
 }
 
 button {
-    background-color: #007aff;
+    background-color: #0d47a1;
     color: white;
     border: none;
-    padding: 12px 20px;
+    padding: 14px 30px;
     border-radius: 8px;
-    font-size: 1rem;
+    font-size: 1.1rem;
     cursor: pointer;
     transition: background 0.3s ease;
     margin-top: 15px;
     width: 100%;
+    max-width: 300px;
 }
 
 button:hover {
-    background-color: #005bb5;
+    background-color: #08306b;
 }
 
 .result {
-    font-size: 1.1rem;
-    margin-top: 10px;
+    font-size: 1.3rem;
+    margin-top: 15px;
 }
 
 .loader {
     border: 6px solid #f3f3f3;
-    border-top: 6px solid #007aff;
+    border-top: 6px solid #0d47a1;
     border-radius: 50%;
     width: 50px;
     height: 50px;
@@ -61,4 +148,15 @@ button:hover {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    .projects-list li {
+        flex: 1 1 100%;
+    }
+    .nav-menu {
+        flex-direction: column;
+        gap: 10px;
+    }
 }

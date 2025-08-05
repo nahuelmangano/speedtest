@@ -6,7 +6,12 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
+    # Página principal portfolio
     return render_template("index.html")
+
+@app.route("/speedtest")
+def speedtest_page():
+    return render_template("speedtest.html")
 
 @app.route("/run-speedtest")
 def run_speedtest():

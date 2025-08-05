@@ -1,23 +1,21 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Speed Test</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h1>Test de Velocidad</h1>
-    <div class="card">
-        <p id="status"></p>
-        <div class="loader" id="loader"></div>
-        <button onclick="runTest()">Iniciar Test</button>
-        <div id="results" style="display:none;">
-            <div class="result">Descarga: <strong id="download"></strong> Mbps</div>
-            <div class="result">Subida: <strong id="upload"></strong> Mbps</div>
-            <div class="result">Ping: <strong id="ping"></strong> ms</div>
-        </div>
-    </div>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Portfolio de Nahuel Mangano{% endblock %}
+{% block content %}
+<div class="container">
+    <h1>Hola, soy Nahuel Mangano</h1>
+    <p>Soy desarrollador de software y este es mi portfolio.</p>
+
+    <h2>Proyectos</h2>
+    <ul class="projects-list">
+        <li>
+            <a href="{{ url_for('speedtest_page') }}">App Test de Velocidad</a>
+            <p>Una app web para medir velocidad de Internet con Flask y Python.</p>
+        </li>
+        <!-- Podés agregar más proyectos acá -->
+    </ul>
+
+    <h2>Contacto</h2>
+    <p>Email: <a href="mailto:nmangano@example.com">nmangano@example.com</a></p>
+    <p>LinkedIn: <a href="https://www.linkedin.com/in/tu-linkedin" target="_blank" rel="noopener noreferrer">Tu perfil LinkedIn</a></p>
+</div>
+{% endblock %}

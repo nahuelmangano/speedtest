@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}Portfolio de Nahuel Mangano{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+    <header>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="{{ url_for('index') }}">Inicio</a></li>
+                <li><a href="{{ url_for('speedtest_page') }}">Test de Velocidad</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p>© 2025 Nahuel Mangano. Todos los derechos reservados.</p>
+    </footer>
+</body>
+</html>
