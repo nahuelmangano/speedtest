@@ -1,18 +1,30 @@
 function runTest() {
-    document.getElementById("status").textContent = "Ejecutando test... esto puede tardar unos segundos.";
-    document.getElementById("results").style.display = "none";
+    const resultsBox = document.getElementById("results");
+    const statusText = document.getElementById("status");
+    const loader = document.getElementById("loader");
+
+    resultsBox.style.display = "none";
+    loader.style.display = "block";
+    statusText.innerText = "Realizando test de velocidad, por favor espere...";
 
     fetch("/run-speedtest")
-        .then(response => response.json())
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("Error al realizar el test");
+            }
+            return response.json();
+        })
         .then(data => {
-            document.getElementById("download").textContent = data.download;
-            document.getElementById("upload").textContent = data.upload;
-            document.getElementById("ping").textContent = data.ping;
-            document.getElementById("results").style.display = "block";
-            document.getElementById("status").textContent = "Test completado.";
+            document.getElementById("download").innerText = data.download;
+            document.getElementById("upload").innerText = data.upload;
+            document.getElementById("ping").innerText = data.ping;
+            resultsBox.style.display = "block";
+            statusText.innerText = "";
         })
         .catch(error => {
-            document.getElementById("status").textContent = "Error al ejecutar el test.";
-            console.error(error);
+            statusText.innerText = "Ocurrió un error: " + error.message;
+        })
+        .finally(() => {
+            loader.style.display = "none";
         });
 }

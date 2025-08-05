@@ -2,60 +2,22 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Test de Velocidad</title>
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f2f2f2;
-            color: #333;
-            text-align: center;
-            padding: 50px;
-        }
-
-        h1 {
-            margin-bottom: 30px;
-        }
-
-        button {
-            background-color: #007BFF;
-            color: white;
-            padding: 15px 30px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        .box {
-            margin-top: 30px;
-            padding: 30px;
-            border-radius: 8px;
-            background-color: white;
-            display: inline-block;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-        }
-
-        #status {
-            margin-top: 20px;
-            font-style: italic;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Test</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Test de Velocidad de Internet</h1>
-    <button onclick="runTest()">Iniciar Test</button>
-
-    <div class="box" id="results" style="display:none;">
-        <p><strong>Descarga:</strong> <span id="download">-</span> Mbps</p>
-        <p><strong>Subida:</strong> <span id="upload">-</span> Mbps</p>
-        <p><strong>Ping:</strong> <span id="ping">-</span> ms</p>
+    <h1>Test de Velocidad</h1>
+    <div class="card">
+        <p id="status"></p>
+        <div class="loader" id="loader"></div>
+        <button onclick="runTest()">Iniciar Test</button>
+        <div id="results" style="display:none;">
+            <div class="result">Descarga: <strong id="download"></strong> Mbps</div>
+            <div class="result">Subida: <strong id="upload"></strong> Mbps</div>
+            <div class="result">Ping: <strong id="ping"></strong> ms</div>
+        </div>
     </div>
-
-    <p id="status"></p>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
