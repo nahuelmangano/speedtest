@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Manchas de colores en canvas</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      color: white;
+    }
+    canvas {
+      background: #222;
+      border: 2px solid #555;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Manchas de colores acumuladas 🎨</h1>
+<canvas id="canvas" width="800" height="600"></canvas>
+
+<script>
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function randomInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function randomFloat(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function randomColorAlpha() {
+  const r = randomInt(0, 255);
+  const g = randomInt(0, 255);
+  const b = randomInt(0, 255);
+  const a = randomFloat(0.05, 0.25);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+async function mainLoop() {
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d");
+
+  while (true) {
+    const x = randomInt(0, canvas.width);
+    const y = randomInt(0, canvas.height);
+    const radius = randomInt(20, 100);
+
+    ctx.beginPath();
+    ctx.fillStyle = randomColorAlpha();
+    ctx.shadowColor = ctx.fillStyle;
+    ctx.shadowBlur = 20;
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.fill();
+
+    await sleep(100); // cada 100ms agrega una mancha nueva
+  }
+}
+
+mainLoop();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Terreno 3D con Ruido Perlin y Módulos ES</title>
+  <style>
+    body { margin: 0; overflow: hidden; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+
+<script type="module">
+  import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.module.js';
+  import SimplexNoise from 'https://cdn.jsdelivr.net/npm/simplex-noise@3.0.0/dist/esm/simplex-noise.js';
+
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x222222);
+
+  const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
+  camera.position.set(0, 50, 100);
+  camera.lookAt(0, 0, 0);
+
+  const renderer = new THREE.WebGLRenderer({antialias:true});
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+
+  const light = new THREE.DirectionalLight(0xffffff, 1);
+  light.position.set(50, 100, 50);
+  scene.add(light);
+  scene.add(new THREE.AmbientLight(0x404040));
+
+  const noise = new SimplexNoise();
+
+  const width = 100;
+  const height = 100;
+  const segments = 100;
+  const geometry = new THREE.PlaneGeometry(width, height, segments, segments);
+
+  const scale = 0.1;
+  for (let i = 0; i < geometry.attributes.position.count; i++) {
+    const x = geometry.attributes.position.getX(i);
+    const y = geometry.attributes.position.getY(i);
+    const z = noise.noise2D(x * scale, y * scale) * 10;
+    geometry.attributes.position.setZ(i, z);
+  }
+  geometry.computeVertexNormals();
+
+  const material = new THREE.MeshStandardMaterial({
+    color: 0x6699ff,
+    wireframe: false,
+    flatShading: true,
+    side: THREE.DoubleSide
+  });
+
+  const terrain = new THREE.Mesh(geometry, material);
+  terrain.rotation.x = -Math.PI / 2;
+  scene.add(terrain);
+
+  function animate() {
+    requestAnimationFrame(animate);
+    terrain.rotation.z += 0.001;
+    terrain.rotation.x += 0.001;
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+</script>
+
+</body>
+</html>

@@ -9,6 +9,13 @@ def index():
     # Página principal portfolio
     return render_template("index.html")
 
+@app.route("/tortugas")
+def tortugas_page():
+    return render_template("tortuga.html")
+@app.route("/perlin")
+def perlin_page():
+    return render_template("rperlin.html")
+
 @app.route("/speedtest")
 def speedtest_page():
     return render_template("speedtest.html")
