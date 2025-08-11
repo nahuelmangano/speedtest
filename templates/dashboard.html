@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2>Bienvenido {{ session['user'] }}</h2>
+<a href="{{ url_for('logout') }}">Cerrar sesión</a>
+
+<h3>Lista de usuarios registrados:</h3>
+<ul>
+  {% for u in users %}
+    <li>{{ u.username }}</li>
+  {% endfor %}
+</ul>
+{% endblock %}
