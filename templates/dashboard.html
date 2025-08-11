@@ -5,9 +5,16 @@
 <a href="{{ url_for('logout') }}">Cerrar sesión</a>
 
 <h3>Lista de usuarios registrados:</h3>
+
 <ul>
-  {% for u in users %}
-    <li>{{ u.username }}</li>
-  {% endfor %}
+{% for user in users %}
+  <li>
+    {{ user.username }} -
+    Roles:
+    {% for role in user.roles %}
+      {{ role.name }}{% if not loop.last %}, {% endif %}
+    {% endfor %}
+  </li>
+{% endfor %}
 </ul>
 {% endblock %}

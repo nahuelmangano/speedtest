@@ -22,17 +22,27 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 # Inicializar base de datos
 db = SQLAlchemy(app)
 
-# Modelo Usuario con password_hash tipo Text (sin límite de tamaño)
+# Tabla intermedia para relación muchos a muchos entre usuarios y roles
+user_roles = db.Table('user_roles',
+    db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
+    db.Column('role_id', db.Integer, db.ForeignKey('role.id'), primary_key=True)
+)
+
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True, nullable=False)
-    password_hash = db.Column(db.Text, nullable=False)  # Cambiado a Text
+    password_hash = db.Column(db.Text, nullable=False)  # Sin límite de tamaño
+    roles = db.relationship('Role', secondary=user_roles, backref=db.backref('users', lazy='dynamic'))
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
     
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+class Role(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), unique=True, nullable=False)
 
 # --- RUTAS PRINCIPALES ---
 
@@ -69,69 +79,74 @@ def run_speedtest():
 
 # --- RUTAS DE AUTENTICACIÓN ---
 
-@app.route("/login")
-def login_page():
-    return render_template("login.html")
-
-@app.route("/register")
-def register_page():
-    return render_template("register.html")
-
-
-
-
-# Ruta para mostrar login y procesar login
-@app.route('/login', methods=['GET', 'POST'])
+@app.route("/login", methods=["GET", "POST"])
 def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
         user = User.query.filter_by(username=username).first()
         if user and user.check_password(password):
-            session['user'] = user.username
-            flash('Login exitoso', 'success')
-            return redirect(url_for('dashboard'))
+            session["user"] = user.username
+            flash("Login exitoso", "success")
+            return redirect(url_for("dashboard"))
         else:
-            flash('Usuario o contraseña incorrectos', 'error')
-    return render_template('login.html')
+            flash("Usuario o contraseña incorrectos", "error")
+    return render_template("login.html")
 
-# Ruta para mostrar registro y procesar registro
-@app.route('/register', methods=['GET', 'POST'])
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
         if User.query.filter_by(username=username).first():
-            flash('El usuario ya existe', 'error')
-            return redirect(url_for('register'))
+            flash("El usuario ya existe", "error")
+            return redirect(url_for("register"))
+
         new_user = User(username=username)
         new_user.set_password(password)
+
+        # Asignar rol por defecto "user"
+        role_user = Role.query.filter_by(name="user").first()
+        if not role_user:
+            role_user = Role(name="user")
+            db.session.add(role_user)
+            db.session.commit()
+
+        new_user.roles.append(role_user)
+
         db.session.add(new_user)
         db.session.commit()
-        flash('Registro exitoso, ahora podés ingresar', 'success')
-        return redirect(url_for('login'))
-    return render_template('register.html')
+
+        flash("Registro exitoso, ahora podés ingresar", "success")
+        return redirect(url_for("login"))
+    return render_template("register.html")
 
 # Ruta protegida, solo para usuarios logueados
-@app.route('/dashboard')
+@app.route("/dashboard")
 def dashboard():
-    if 'user' not in session:
-        flash('Por favor logueate primero', 'error')
-        return redirect(url_for('login'))
+    if "user" not in session:
+        flash("Por favor logueate primero", "error")
+        return redirect(url_for("login"))
     users = User.query.all()
-    return render_template('dashboard.html', users=users)
+    return render_template("dashboard.html", users=users)
 
 # Logout
-@app.route('/logout')
+@app.route("/logout")
 def logout():
-    session.pop('user', None)
-    flash('Sesión cerrada', 'info')
-    return redirect(url_for('login'))
+    session.pop("user", None)
+    flash("Sesión cerrada", "info")
+    return redirect(url_for("login"))
 
 
 if __name__ == "__main__":
-    # Crear tablas si no existen (solo para desarrollo)
     with app.app_context():
         db.create_all()
+        # Crear roles por defecto si no existen
+        for role_name in ["admin", "user", "moderator"]:
+            rol = Role.query.filter_by(name=role_name).first()
+            if not rol:
+                db.session.add(Role(name=role_name))
+        db.session.commit()
 
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)
