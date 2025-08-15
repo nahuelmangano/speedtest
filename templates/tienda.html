@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tienda - Fikastore</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tienda.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Catálogo de Productos</h1>
+        <a href="{{ url_for('dashboard') }}" class="btn-volver">← Volver al Dashboard</a>
+    </header>
+
+    <main class="grid-container">
+        {% for producto in productos %}
+        <div class="card">
+            <a href="{{ url_for('producto_page', producto_id=producto.id) }}">
+         <img src="{{ producto.imagen_url }}" alt="{{ producto.nombre }}" width="150">
+      </a>
+           
+            
+            <div class="card-info">
+                <h2>{{ producto.nombre }}</h2>
+                <p class="precio">${{ "%.2f"|format(producto.precio) }}</p>
+                <p class="descripcion">{{ producto.descripcion }}</p>
+              
+            </div>
+        </div>
+        {% endfor %}
+    </main>
+</body>
+</html>

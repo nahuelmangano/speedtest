@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Agregar Producto{% endblock %}
+{% block content %}
+<h2>Agregar Producto</h2>
+<a href="{{ url_for('dashboard') }}">Volver al Dashboard</a>
+
+<form method="POST" enctype="multipart/form-data">
+    <label>Nombre:</label>
+    <input type="text" name="nombre" required><br>
+
+    <label>Precio:</label>
+    <input type="number" name="precio" step="0.01" required><br>
+
+    <label>Stock:</label>
+    <input type="number" name="stock" required><br>
+
+    <label>Color:</label>
+    <input type="text" name="color"><br>
+
+    <label>Descripción:</label>
+    <textarea name="descripcion"></textarea><br>
+
+    <label>Categoría:</label>
+    <select name="categoria_id">
+        <option value="">--Seleccione--</option>
+        {% for cat in categorias %}
+        <option value="{{ cat.id }}">{{ cat.nombre }}</option>
+        {% endfor %}
+    </select><br>
+
+    <label>Imagen:</label>
+    <input type="file" name="imagen"><br><br>
+
+    <button type="submit">Agregar producto</button>
+</form>
+
+{% endblock %}

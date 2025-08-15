@@ -3,18 +3,26 @@
 {% block content %}
 <h2>Bienvenido {{ session['user'] }}</h2>
 <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+<a href="{{ url_for('agregar_producto') }}">Agregar Producto</a>
+<a href="{{ url_for('tienda') }}" class="btn">Ir a la Tienda</a>
+
 
 <h3>Lista de usuarios registrados:</h3>
-
 <ul>
 {% for user in users %}
   <li>
-    {{ user.username }} -
-    Roles:
+    {{ user.username }} - Roles:
     {% for role in user.roles %}
       {{ role.name }}{% if not loop.last %}, {% endif %}
     {% endfor %}
   </li>
 {% endfor %}
 </ul>
+
+<h3>Productos:</h3>
+
+<h3>Lista de productos:</h3>
+
+
+
 {% endblock %}
